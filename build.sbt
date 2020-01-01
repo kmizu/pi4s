@@ -20,6 +20,10 @@ scalacOptions in (Compile, doc) ++= { Seq(
   "-doc-source-url", s"https://github.com/kmizu/macro_peg/tree/${scaladocBranch.value}€{FILE_PATH}.scala"
 )}
 
+assemblyJarName in assembly := "pi4s.jar"
+
+mainClass in assembly := Some("com.github.kmizu.pi4s.Main")
+
 scalacOptions ++= {
   Seq("-unchecked", "-deprecation", "-feature", "-language:implicitConversions")
 }
@@ -37,7 +41,9 @@ initialCommands in console += {
     "com.pi4j.io.gpio._",
     "com.pi4j.wiringpi._"
   ).map("import "+).mkString("\n")
-  val body = "Gpio.wiringPiSetupGpio()"
+  val body = Iterator(
+    "Gpio.wiringPiSetupGpio()"
+  ).mkString("\n")
   s"""
     ${imports}
     ${body}
